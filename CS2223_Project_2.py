@@ -1,6 +1,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 import math
+import time
 
 # Traveling Sales Person Algorithm Class
 class TSP_Algorithm:
@@ -65,7 +66,10 @@ class TSP_Algorithm:
 	#Prints the solution in a pretty output.
 	def printSolutionPath(self):
 		# Get data
+		ti = time.clock(); #start timing
 		(isFound, t_weight, solution_path) = self.findPath(self.home, self.open_list);
+		tf = time.clock();
+		t_runtime = tf - ti; # get run time
 		# Print Data if solution is found
 		if(isFound):
 			print ('Starting home city: ' + self.home);
@@ -74,6 +78,7 @@ class TSP_Algorithm:
 				j += 1;
 				print ('Visit ' + str(j) + ' City : ' + str(i));
 			print ('Total Cost of Trip: ' + str(t_weight));
+			print ('Algorithm Time: ' +str(t_runtime)+'s');
 		else:
 			print ('A solution has not been found.');
 
