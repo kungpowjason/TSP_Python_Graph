@@ -2,17 +2,23 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 
-G = nx.MultiDiGraph();
-
-n_nodes = ['v1', 'v2', 'v3', 'v4'];
-edge_list = [('v1', 'v2', 2), ('v1', 'v3', 9), ('v2', 'v1', 1), ('v2', 'v4', 4), ('v2', 'v3', 6), ('v3', 'v2', 7), ('v3', 'v4', 8), ('v4', 'v2', 3),
+n_nodes1 = ['v1', 'v2', 'v3', 'v4'];
+edge_list1 = [('v1', 'v2', 2), ('v1', 'v3', 9), ('v2', 'v1', 1), ('v2', 'v4', 4), ('v2', 'v3', 6), ('v3', 'v2', 7), ('v3', 'v4', 8), ('v4', 'v2', 3),
 ('v4', 'v1', 6)];
-G.add_nodes_from(n_nodes);
-G.add_weighted_edges_from(edge_list);
+
+n_nodes2 = ['v1', 'v2', 'v3', 'v4', 'v5'];
+edge_list2 = [('v1', 'v2', 14),('v1', 'v3', 4),('v1', 'v4', 10),('v1', 'v5', 20),
+('v2', 'v1', 14), ('v2', 'v3', 7), ('v2', 'v4', 8), ('v2', 'v5', 7),
+('v3', 'v1', 4), ('v3', 'v2', 5), ('v3', 'v4', 7), ('v3', 'v5', 16),
+('v4', 'v1', 11), ('v4', 'v2', 7), ('v4', 'v3', 9), ('v4', 'v5', 2),
+('v5', 'v1', 18), ('v5', 'v2', 7), ('v5', 'v3', 17),('v5', 'v4', 4) ]
+
+G = nx.MultiDiGraph();
+G.add_nodes_from(n_nodes2);
+G.add_weighted_edges_from(edge_list2);
 G.degree(weight='weight');
 
-
-open_list = n_nodes;
+open_list = n_nodes2;
 candidate_solutions = [];
 arr_solutions = [];
 
@@ -92,7 +98,7 @@ def findPath3(n, arr, op_list):
 	return (isFound, t_weight, ans_arr);
 
 
-def findPath4(n, op_list, level):
+def findPath4(n, op_list):
 	neighbors = G.neighbors(n);
 	t_weight = 1000;
 	best_arr = [];
@@ -103,8 +109,6 @@ def findPath4(n, op_list, level):
 	for neighbor in neighbors:
 		isFound = False;
 		new_op_list = list(op_list);
-		print (neighbor + ', ' + str(level));
-		print (op_list);
 		if neighbor in op_list:
 			neigh_weight = G.get_edge_data(n, neighbor)[0]['weight'];
 			if neighbor == 'v1' and len(op_list) == 1:
@@ -114,7 +118,7 @@ def findPath4(n, op_list, level):
 				return (isFound, t_weight, [(neighbor, neigh_weight)]);
 			elif neighbor != 'v1':
 				new_op_list.remove(neighbor);
-				(isFound, a_weight, a_arr) = findPath4(neighbor, new_op_list, level + 1);
+				(isFound, a_weight, a_arr) = findPath4(neighbor, new_op_list);
 				if (isFound):
 					found_flag = True;
 				t_weight = a_weight + neigh_weight;
@@ -132,4 +136,4 @@ def drawGraph():
 	nx.draw_circular(G, with_labels=True);
 	plt.show();
 
-print (findPath4('v1', open_list, 0));
+print (findPath4('v1', open_list));
